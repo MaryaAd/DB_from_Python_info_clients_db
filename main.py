@@ -17,8 +17,8 @@ def create_db(connect, cursor):
                 client_id INTEGER NOT NULL REFERENCES clients(client_id) ON DELETE CASCADE,
                 phone VARCHAR(40)); 
                 """)
-
-    connect.commit()
+    #  контекстный менеджер подключения сам по себе делает commit после всех операций в нем, поэтому отдельно их можно не прописывать
+    #  connect.commit()
 
 
 def delete_table(cursor):
@@ -75,7 +75,8 @@ def change_info_clients(connect, cursor, client_id, first_name=None, last_name=N
         cur.execute("""
             UPDATE phones SET phone=%s WHERE client_id=%s;
             """, (phone, client_id))
-    connect.commit()
+    #  контекстный менеджер подключения сам по себе делает commit после всех операций в нем, поэтому отдельно их можно не прописывать.
+    #  connect.commit()
     print(f'Данные клиента с id {client_id} изменены.')
 
 
@@ -84,7 +85,7 @@ def delete_phone_client(connect, cursor, client_id, phone):
     cursor.execute("""
             DELETE FROM phones WHERE client_id=%s AND phone=%s;
             """, (client_id, phone))
-    connect.commit()
+    #  connect.commit()
     print(f'Номер телефона {phone} для клиента с id {client_id} удален.')
 
 
@@ -93,7 +94,7 @@ def delete_client(connect, cursor, client_id):
     cursor.execute("""
             DELETE FROM clients WHERE client_id=%s;
             """, (client_id,))
-    connect.commit()
+    #  connect.commit()
     print(f'Клиент с id {client_id} удален.')
     #  запрос сохраняет изменения без commit
     # cur.execute("""
